@@ -44,12 +44,18 @@ public class PlayerCounterAttackState : PlayerState
                             .Select(c => c.GetComponent<Enemy>())
                             .OfType<Enemy>();
 
+        bool cloneSpawned = false;
         foreach (var enemy in hitEnemies)
         {
             if (enemy.stunWindowOpen)
             {
                 enemy.Stun();
                 player.animator.SetBool("SuccessfulCounterAttack", true);
+                if (!cloneSpawned)
+                {
+                    player.skill.clone.CreateCloneOnCounterattack(enemy.transform);
+                    cloneSpawned = true;
+                }
             }
         }
     }

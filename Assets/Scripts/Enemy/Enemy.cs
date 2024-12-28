@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
 
 namespace Assets.Scripts.Enemy
 {
@@ -14,6 +9,7 @@ namespace Assets.Scripts.Enemy
         public float moveSpeed;
         public float idleTime;
         public float battleTime;
+        private float defaultMoveSpeed;
 
         [Header("Attack info")]
         public float attackDistance;
@@ -31,6 +27,27 @@ namespace Assets.Scripts.Enemy
         public float playerDetectionDistance = 20f;
 
         public EnemyStateMachine stateMachine { get; private set; }
+
+        public virtual void SetFreeze(bool isFrozen)
+        {
+            if (isFrozen)
+            {
+                animator.speed = 0;
+                moveSpeed = 0;
+            }
+            else
+            {
+                animator.speed = 1;
+                moveSpeed = defaultMoveSpeed;
+            }
+        }
+
+        public virtual IEnumerator FreezeFor(float seconds)
+        {
+            SetFreeze(true);
+            yield return new WaitForSeconds(seconds);
+            SetFreeze(false);       
+        }
 
         public virtual void SetCounterAttackWindow(bool value)
         {
@@ -56,6 +73,7 @@ namespace Assets.Scripts.Enemy
         {
             base.Awake();
             stateMachine = new EnemyStateMachine();
+            defaultMoveSpeed = moveSpeed;
         }
 
         protected override void Start()

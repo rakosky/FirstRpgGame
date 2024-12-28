@@ -19,6 +19,7 @@ public class PlayerAnimationTriggers : MonoBehaviour
             var enemy = collider.GetComponent<Enemy>();
             if(enemy != null)
             {
+                enemy.stats.TakeDamage(player.stats.damage);
                 enemy.Damage();
             }
         }

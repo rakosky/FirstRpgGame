@@ -9,7 +9,6 @@ public class PlayerManager : MonoBehaviour
 
     private void Awake()
     {
-        Debug.Log("Player manager awake");
         if (instance != null)
             Destroy(gameObject);
         else

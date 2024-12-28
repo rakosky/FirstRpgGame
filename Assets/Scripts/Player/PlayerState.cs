@@ -49,6 +49,11 @@ public abstract class PlayerState
             }
         }
 
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            player.skill.crystal.UseSkill();
+        }
+
     }
 
     public virtual void AnimationFinishTrigger()

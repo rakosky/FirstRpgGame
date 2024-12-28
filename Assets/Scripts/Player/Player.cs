@@ -33,7 +33,7 @@ public class Player : Entity
     public GameObject sword { get; private set; }
     public void SetSword(GameObject sword)
     {
-        if (this.sword is not null)
+        if (this.sword != null)
             Destroy(this.sword);
         this.sword = sword;
     }
@@ -51,6 +51,7 @@ public class Player : Entity
     public PlayerCounterAttackState counterAttackState { get; private set; }
     public PlayerAimSwordState aimSwordState { get; private set; }
     public PlayerCatchSwordState catchSwordState { get; private set; }
+    public PlayerBlackholeState blackholeState { get; private set; }
 
     #endregion
 
@@ -96,7 +97,7 @@ public class Player : Entity
         counterAttackState = new PlayerCounterAttackState(this, stateMachine, "CounterAttack");
         aimSwordState = new PlayerAimSwordState(this, stateMachine, "AimSword");
         catchSwordState = new PlayerCatchSwordState(this, stateMachine, "CatchSword");
-
+        blackholeState = new PlayerBlackholeState(this, stateMachine, "Jump");
         skill = SkillManager.instance;
     }
 

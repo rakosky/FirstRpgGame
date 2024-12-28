@@ -19,6 +19,7 @@ public class SkeletonAnimationTriggers : MonoBehaviour
             var player = collider.GetComponent<Player>();
             if (player != null)
             {
+                
                 player.Damage();
             }
         }

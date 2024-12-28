@@ -1,3 +1,5 @@
+using Autodesk.Fbx;
+using UnityEditor.Build;
 using UnityEngine;
 
 public enum SwordType
@@ -16,11 +18,22 @@ public class SwordThrowSkill : Skill
     [SerializeField] private GameObject swordPrefab;
     [SerializeField] private Vector2 throwVelocity;
     [SerializeField] private float swordGravity;
+    [SerializeField] private float freezeTime;
 
     [Header("Bounce info")]
-    [SerializeField] private int amountOfBounces;
+    [SerializeField] private int bounceAmount;
     [SerializeField] private float bounceSpeed;
     [SerializeField] private float bounceGravity;
+
+    [Header("Pierce info")]
+    [SerializeField] private float pierceGravity;
+    [SerializeField] private int pierceAmount;
+
+    [Header("Spin info")]
+    [SerializeField] private float maxTravelDistance;
+    [SerializeField] private float spinDuration;
+    [SerializeField] private float spinGravity;
+    [SerializeField] private float spinningHitTickDamageCooldown;
 
     [Header("Aim markers")]
     [SerializeField] private int numberOfDots;
@@ -68,11 +81,22 @@ public class SwordThrowSkill : Skill
 
         if (swordType == SwordType.Bounce)
         {
-            controller.SetupBounceSword(amountOfBounces, bounceSpeed);
+            swordGravity = bounceGravity;
+            controller.SetupBounceSword(bounceAmount, bounceSpeed);
+        }
+        else if (swordType == SwordType.Pierce)
+        {
+            swordGravity = pierceGravity;
+            controller.SetupPierceSword(pierceAmount);
+        }
+        else if(swordType == SwordType.Spin)
+        {
+            swordGravity = spinGravity;
+            controller.SetupSpinSword(maxTravelDistance, spinDuration, spinningHitTickDamageCooldown);
         }
 
         player.SetSword(sword);
-        controller.SetupSword(finalThrowDirection, swordGravity);
+        controller.SetupSword(finalThrowDirection, swordGravity, freezeTime);
     }
 
     public Vector2 AimDirection()

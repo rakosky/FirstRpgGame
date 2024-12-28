@@ -50,7 +50,7 @@ public class PlayerGroundState : PlayerState
 
         if(Input.GetKey(KeyCode.Mouse1)) 
         {
-            if (player.sword is null)
+            if (player.sword == null)
             {
                 stateMachine.ChangeState(player.aimSwordState);
                 return;
@@ -58,6 +58,15 @@ public class PlayerGroundState : PlayerState
             else
             {
                 player.sword.GetComponent<SwordThrowSkillController>().ReturnSword();
+                return;
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            if (player.skill.blackhole.CanUse())
+            {
+                stateMachine.ChangeState(player.blackholeState);
                 return;
             }
         }

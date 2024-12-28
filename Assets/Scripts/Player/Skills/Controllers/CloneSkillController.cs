@@ -9,13 +9,13 @@ public class CloneSkillController : MonoBehaviour
 
     private float cloneTimer;
     private bool canAttack;
+    private bool canReproc;
+    private float chanceToReproc;
+    private float facingDir = 1;
     [SerializeField] private float colorLosingSpeed;
 
     [SerializeField] private Transform attackCheck;
     [SerializeField] private float attackCheckRadius = .8f;
-
-    private Enemy closestEnemy;
-
 
     private void Awake()
     {
@@ -23,12 +23,17 @@ public class CloneSkillController : MonoBehaviour
         anim = GetComponent<Animator>();
     }
 
-    public void SetupClone(Transform transform, float cloneDuration, bool canAttack)
+    public void SetupClone(Transform transform, float cloneDuration, bool canAttack, bool canReproc, float chanceToReproc, Enemy closestEnemy, Vector3? offset = null)
     {
         this.transform.position = transform.position;
-        this.FaceClosestTarget();
+        if (offset != null)
+            this.transform.position += offset.Value;
+
+        this.FaceEnemy(closestEnemy);
         cloneTimer = cloneDuration;
         this.canAttack = canAttack;
+        this.canReproc = canReproc;
+        this.chanceToReproc = chanceToReproc;
 
         if (canAttack)
         {
@@ -50,34 +55,18 @@ public class CloneSkillController : MonoBehaviour
         }
     }
 
-    private void FaceClosestTarget()
+    private void FaceEnemy(Enemy enemy)
     {
-        var nearbyEnemies = Physics2D.OverlapCircleAll(transform.position, 25)
-            .Select(c => c.GetComponent<Enemy>())
-            .OfType<Enemy>();
-
-        var closestDistance = Mathf.Infinity;
-
-        foreach (var enemy in nearbyEnemies)
+        if (enemy != null)
         {
-            var currentDistance = Vector2.Distance(this.transform.position, enemy.transform.position);
-
-            if (closestDistance > currentDistance)
-            {
-                closestDistance = currentDistance;
-                closestEnemy = enemy;
-            }
-        }
-
-        if (closestEnemy is not null)
-        {
-            if (transform.position.x > closestEnemy.transform.position.x)
+            if (transform.position.x > enemy.transform.position.x)
             {
                 transform.Rotate(0, 180, 0);
+                facingDir = -1;
             }
         }
     }
-
+     
     private void AnimationTrigger()
     {
     }
@@ -85,14 +74,23 @@ public class CloneSkillController : MonoBehaviour
     private void AttackTrigger()
     {
         var colliders = Physics2D.OverlapCircleAll(attackCheck.position, attackCheckRadius);
-
+        bool hasReprocced = false;
         foreach (var collider in colliders)
         {
             var enemy = collider.GetComponent<Enemy>();
             if (enemy != null)
             {
                 enemy.Damage();
+                if (canReproc && !hasReprocced)
+                {
+                    hasReprocced = true;
+                    if (Random.Range(0, 100) < chanceToReproc)
+                    {
+                        SkillManager.instance.clone.CreateClone(enemy.transform, new Vector3(1f * facingDir, 0));
+                    }
+                }
             }
         }
+
     }
 }

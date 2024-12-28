@@ -23,6 +23,8 @@ public class Entity : MonoBehaviour
     public Animator animator { get; private set; }
     public Rigidbody2D rb { get; private set; }
     public EntityFX entityFX { get; private set; }
+    public SpriteRenderer spriteRenderer { get; private set; }
+    public CharacterStats stats { get; private set; }
 
     #endregion
 
@@ -36,7 +38,8 @@ public class Entity : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
         entityFX = GetComponent<EntityFX>();
-
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        stats = GetComponent<CharacterStats>();
         groundMask = LayerMask.GetMask("Ground");
     }
 
@@ -49,8 +52,6 @@ public class Entity : MonoBehaviour
     {
         entityFX.StartCoroutine(entityFX.FlashFx());
         StartCoroutine(HitKnockback());
-
-        Debug.Log(gameObject.name + " was damaged!");
     }
 
     protected virtual IEnumerator HitKnockback()
@@ -62,6 +63,17 @@ public class Entity : MonoBehaviour
         isKnocked = false;
     }
 
+    public void SetVisible(bool isVisible)
+    {
+        if (isVisible)
+        {
+            spriteRenderer.color = Color.white;
+        }
+        else
+        {
+            spriteRenderer.color = Color.clear;
+        }
+    }
 
     #region Velocity
     public Vector2 velocity

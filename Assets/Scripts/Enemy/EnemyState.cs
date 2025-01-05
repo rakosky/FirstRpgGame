@@ -26,19 +26,21 @@ namespace Assets.Scripts.Enemy
 
         public virtual void Enter()
         {
-            enemyBase.animator.SetBool(animationName, true);
+            if(animationName != null)
+                enemyBase.animator.SetBool(animationName, true);
             triggerCalled = false;
         }
 
         public virtual void Exit()
         {
-            enemyBase.animator.SetBool(animationName, false);
+            if (animationName != null)
+                enemyBase.animator.SetBool(animationName, false);
+            enemyBase.lastAnimName = animationName;
         }
 
         public virtual void Update()
         {
             stateTimer -= Time.deltaTime;
-
         }
 
         public virtual void AnimationFinishTrigger() => triggerCalled = true;

@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 
 public class EntityFX : MonoBehaviour
@@ -9,11 +10,18 @@ public class EntityFX : MonoBehaviour
     [SerializeField] private Material hitMat;
     private Material originalMat;
 
+    [Header("Ailment colors")]
+    public Color[] chilledColor;
+    public Color[] shockedColor;
+    public Color[] ignitedColor;
+
+    private Color defaultColor;
+
     private void Start()
     {
         sr = GetComponentInChildren<SpriteRenderer>();
         originalMat = sr.material;
-
+        defaultColor = sr.color;
     }
 
     public IEnumerator FlashFx(float remainingEffectTime = .4f, float flashInterval = .1f)
@@ -28,15 +36,35 @@ public class EntityFX : MonoBehaviour
         }
     }
 
-    public IEnumerator BlinkColorFx(Color color, int blinkTimes = 5, float blinkInterval = .1f)
+    public IEnumerator BlinkColorFx(Color[] colors, float duration = 5, float blinkInterval = .1f)
     {
-        var originalColor = sr.color;
-        for (int i = 0; i < blinkTimes; i++)
+        if (colors == null || colors.Length == 0)
+            throw new System.Exception("Colors array invalid");
+
+        if (colors.Length == 1)
+            colors = new Color[2] { colors[0], defaultColor };
+
+        for (float i = 0; i < duration; i += blinkInterval) // one cycle of colors array
         {
-            sr.color = color;
-            yield return new WaitForSeconds(blinkInterval / 2);
-            sr.color = originalColor;
-            yield return new WaitForSeconds(blinkInterval / 2);
+            foreach (var color in colors) // flash each color of array
+            {
+                sr.color = color;
+                yield return new WaitForSeconds(blinkInterval / colors.Length);
+            }
+        }
+        sr.color = defaultColor;
+    }
+
+
+    public void SetTransparent(bool isVisible)
+    {
+        if (isVisible)
+        {
+            sr.color = defaultColor;
+        }
+        else
+        {
+            sr.color = Color.clear;
         }
     }
 }

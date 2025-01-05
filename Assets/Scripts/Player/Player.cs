@@ -6,24 +6,21 @@ public class Player : Entity
 {
 
     [Header("Movement")]
-    [SerializeField]
-    public float moveSpeed = 13f;
-    [SerializeField]
-    public float airMoveSpeedFactor = 0.8f;
-    [SerializeField]
-    public float jumpForce = 7f;
+    [SerializeField] public float defaultMoveSpeed = 13f;
+    [SerializeField] public float moveSpeed;
+    [SerializeField] public float airMoveSpeedFactor = 0.8f;
+    [SerializeField] public float defaultJumpForce = 7f;
+    [SerializeField] public float jumpForce;
 
     [Header("Attacking")]
-    [SerializeField]
-    public Vector2[] attackMovement;
+    [SerializeField] public Vector2[] attackMovement;
     public float counterAttackDuration;
     public float swordReturnImpact = 4;
 
     [Header("Dash")]
-    [SerializeField]
-    public float dashSpeed = 22f;
-    [SerializeField]
-    public float dashDuration = 0.3f;
+    [SerializeField] public float defaultDashSpeed = 22f;
+    [SerializeField] public float dashSpeed = 22f;
+    [SerializeField] public float dashDuration = 0.3f;
 
     public float dashDirection { get; set; }
     public bool isBusy { get; private set; }
@@ -52,6 +49,7 @@ public class Player : Entity
     public PlayerAimSwordState aimSwordState { get; private set; }
     public PlayerCatchSwordState catchSwordState { get; private set; }
     public PlayerBlackholeState blackholeState { get; private set; }
+    public PlayerDeadState deadState { get; private set; }
 
     #endregion
 
@@ -98,6 +96,8 @@ public class Player : Entity
         aimSwordState = new PlayerAimSwordState(this, stateMachine, "AimSword");
         catchSwordState = new PlayerCatchSwordState(this, stateMachine, "CatchSword");
         blackholeState = new PlayerBlackholeState(this, stateMachine, "Jump");
+        deadState = new PlayerDeadState (this, stateMachine, "Dead");
+
         skill = SkillManager.instance;
     }
 
@@ -105,6 +105,10 @@ public class Player : Entity
     {
         base.Start();
         stateMachine.Initialize(idleState);
+
+        moveSpeed = defaultMoveSpeed;
+        jumpForce = defaultJumpForce;
+        dashSpeed = defaultDashSpeed;
     }
 
     protected override void Update()
@@ -113,6 +117,32 @@ public class Player : Entity
         stateMachine.currentState.Update();
     }
 
+    public override void Die()
+    {
+        base.Die();
 
+        stateMachine.ChangeState(deadState);
+    }
+
+    public override void SlowByPercentage(float slowPercentage, float slowDuration)
+    {
+        base.SlowByPercentage(slowPercentage, slowDuration);
+
+        moveSpeed *= 1 - slowPercentage;
+        jumpForce *= 1 - slowPercentage;
+        dashSpeed *= 1 - slowPercentage;
+        animator.speed *= 1 - slowPercentage;
+
+        Invoke(nameof(SetToDefaultSpeed), slowDuration);
+    }
+
+    public override void SetToDefaultSpeed()
+    {
+        base.SetToDefaultSpeed();
+
+        moveSpeed = defaultMoveSpeed;
+        jumpForce = defaultJumpForce;
+        dashSpeed = defaultDashSpeed;
+    }
 
 }

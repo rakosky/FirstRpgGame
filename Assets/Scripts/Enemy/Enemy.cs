@@ -9,7 +9,7 @@ namespace Assets.Scripts.Enemy
         public float moveSpeed;
         public float idleTime;
         public float battleTime;
-        private float defaultMoveSpeed;
+        public float defaultMoveSpeed;
 
         [Header("Attack info")]
         public float attackDistance;
@@ -49,6 +49,23 @@ namespace Assets.Scripts.Enemy
             SetFreeze(false);       
         }
 
+        public override void SlowByPercentage(float slowPercentage, float slowDuration)
+        {
+            base.SlowByPercentage(slowPercentage, slowDuration);
+
+            moveSpeed *= 1 - slowPercentage;
+            animator.speed *= 1 - slowPercentage;
+
+            Invoke(nameof(SetToDefaultSpeed), slowDuration);
+        }
+
+        public override void SetToDefaultSpeed()
+        {
+            base.SetToDefaultSpeed();
+
+            moveSpeed = defaultMoveSpeed;
+        }
+
         public virtual void SetCounterAttackWindow(bool value)
         {
             if (!canBeStunned)
@@ -73,7 +90,7 @@ namespace Assets.Scripts.Enemy
         {
             base.Awake();
             stateMachine = new EnemyStateMachine();
-            defaultMoveSpeed = moveSpeed;
+            moveSpeed = defaultMoveSpeed;
         }
 
         protected override void Start()

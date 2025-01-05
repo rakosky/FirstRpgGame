@@ -1,3 +1,5 @@
+using JetBrains.Annotations;
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -18,6 +20,7 @@ public class Entity : MonoBehaviour
     protected bool isKnocked;
 
     public float facingDirection { get; set; } = 1;
+    public string lastAnimName { get; set; }
 
     #region Components
     public Animator animator { get; private set; }
@@ -25,12 +28,16 @@ public class Entity : MonoBehaviour
     public EntityFX entityFX { get; private set; }
     public SpriteRenderer spriteRenderer { get; private set; }
     public CharacterStats stats { get; private set; }
+    public CapsuleCollider2D cd { get; private set; }
 
     #endregion
 
+    public event Action onFlipped;
+
     protected virtual void Awake()
     {
-        
+        stats = GetComponent<CharacterStats>();
+
     }
 
     protected virtual void Start()
@@ -39,8 +46,18 @@ public class Entity : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         entityFX = GetComponent<EntityFX>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        stats = GetComponent<CharacterStats>();
+        cd = GetComponent<CapsuleCollider2D>();
         groundMask = LayerMask.GetMask("Ground");
+    }
+
+    public virtual void SlowByPercentage(float slowPercentage, float slowDuration)
+    {
+
+    }
+
+    public virtual void SetToDefaultSpeed()
+    {
+        animator.speed = 1;
     }
 
     protected virtual void Update()
@@ -48,10 +65,14 @@ public class Entity : MonoBehaviour
         
     }
 
-    public virtual void Damage()
+    public virtual void DamageImpact()
     {
-        entityFX.StartCoroutine(entityFX.FlashFx());
         StartCoroutine(HitKnockback());
+    }
+
+    public virtual void Die()
+    {
+        Debug.Log($"{GetType()} died!");
     }
 
     protected virtual IEnumerator HitKnockback()
@@ -61,18 +82,6 @@ public class Entity : MonoBehaviour
 
         yield return new WaitForSeconds(knockbackDuration);
         isKnocked = false;
-    }
-
-    public void SetVisible(bool isVisible)
-    {
-        if (isVisible)
-        {
-            spriteRenderer.color = Color.white;
-        }
-        else
-        {
-            spriteRenderer.color = Color.clear;
-        }
     }
 
     #region Velocity
@@ -108,6 +117,9 @@ public class Entity : MonoBehaviour
     {
         facingDirection *= -1;
         transform.Rotate(0, 180, 0);
+
+        if(onFlipped != null)
+            onFlipped();
     }
     protected void FlipController()
     {
@@ -128,5 +140,7 @@ public class Entity : MonoBehaviour
         Gizmos.DrawLine(wallCheck.position, new Vector3(wallCheck.position.x + (wallCheckDistance * facingDirection), wallCheck.position.y));
         Gizmos.DrawWireSphere(attackCheck.position, attackRadius);
     }
+
+    
     #endregion
 }

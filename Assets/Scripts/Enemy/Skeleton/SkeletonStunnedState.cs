@@ -21,9 +21,9 @@ namespace Assets.Scripts.Enemy.Skeleton
             stateTimer = enemy.stunDuration;
             enemy.entityFX.StartCoroutine(
                 enemy.entityFX.BlinkColorFx(
-                    color: Color.red,
-                    blinkTimes: 10,
-                    blinkInterval: stateTimer / 10f));
+                    colors: new Color[] { Color.red },
+                    duration: enemy.stunDuration,
+                    blinkInterval: .1f));
 
             enemy.velocityNoFlip = new Vector2(-enemy.facingDirection * enemy.stunForce.x, enemy.stunForce.y);
         }

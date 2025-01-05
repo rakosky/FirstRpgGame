@@ -1,4 +1,5 @@
 using Assets.Scripts.Enemy;
+using System.Linq;
 using UnityEngine;
 
 public class PlayerAnimationTriggers : MonoBehaviour
@@ -19,8 +20,10 @@ public class PlayerAnimationTriggers : MonoBehaviour
             var enemy = collider.GetComponent<Enemy>();
             if(enemy != null)
             {
-                enemy.stats.TakeDamage(player.stats.damage);
-                enemy.Damage();
+                player.stats.DealDamage(enemy.stats, DamageType.Physical);
+
+                var equippedItemData = Inventory.instance.equippedItems.FirstOrDefault(e => (e.data as EquipmentItemData).equipmentType == EquipmentType.Weapon)?.data as EquipmentItemData;
+                equippedItemData?.ExecuteItemEffects(enemy.transform);
             }
         }
     }

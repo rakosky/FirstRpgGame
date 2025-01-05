@@ -12,6 +12,8 @@ public class SkeletonAnimationTriggers : MonoBehaviour
 
     private void AttackTrigger()
     {
+        float attackDamageFactor = 1;
+
         var colliders = Physics2D.OverlapCircleAll(enemy.attackCheck.position, enemy.attackRadius);
 
         foreach (var collider in colliders)
@@ -19,8 +21,7 @@ public class SkeletonAnimationTriggers : MonoBehaviour
             var player = collider.GetComponent<Player>();
             if (player != null)
             {
-                
-                player.Damage();
+                enemy.stats.DealDamage(player.stats, DamageType.Physical, attackDamageFactor);
             }
         }
     }

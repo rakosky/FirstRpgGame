@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7303d0e574137e848a5ea7924dfe76b4, type: 3}
+  m_Name: Thunder Claw
+  m_EditorClassIdentifier: 
+  itemType: 1
+  id: 5
+  name: Thunder Claw
+  icon: {fileID: 1863113123, guid: be55291aae08d434db3da3b59db3ab4a, type: 3}
+  maxStackSize: 1
+  craftDetails:
+    requiredItems: []
+  equipmentType: 0
+  itemEffects:
+  - {fileID: 11400000, guid: a3c3cc111a0898148a20ad723049a8e4, type: 2}
+  stats:
+    str:
+      baseValue: 0
+      modifiers: []
+    luk:
+      baseValue: 0
+      modifiers: []
+    dex:
+      baseValue: 0
+      modifiers: []
+    int:
+      baseValue: 10
+      modifiers: []
+    vit:
+      baseValue: 0
+      modifiers: []
+    maxHealth:
+      baseValue: 0
+      modifiers: []
+    evasion:
+      baseValue: 0
+      modifiers: []
+    defense:
+      baseValue: 0
+      modifiers: []
+    damage:
+      baseValue: 9
+      modifiers: []
+    critRate:
+      baseValue: 0
+      modifiers: []
+    critDamage:
+      baseValue: 0
+      modifiers: []
+    accuracy:
+      baseValue: 0
+      modifiers: []
+    ignoreDefense:
+      baseValue: 0
+      modifiers: []
+    fireDamage:
+      baseValue: 0
+      modifiers: []
+    iceDamage:
+      baseValue: 0
+      modifiers: []
+    lightningDamage:
+      baseValue: 10
+      modifiers: []

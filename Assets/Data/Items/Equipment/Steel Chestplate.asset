@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7303d0e574137e848a5ea7924dfe76b4, type: 3}
+  m_Name: Steel Chestplate
+  m_EditorClassIdentifier: 
+  itemType: 1
+  id: 4
+  name: Steel Chestplate
+  icon: {fileID: -1547736094, guid: a9ca9a41598dd2e44b125928045c518f, type: 3}
+  maxStackSize: 1
+  craftDetails:
+    requiredItems:
+    - quantity: 2
+      itemData: {fileID: 11400000, guid: b4a76ec0795326e4ba090323477cfcda, type: 2}
+    - quantity: 1
+      itemData: {fileID: 11400000, guid: d66f48161ac429d48a72f0f20b147af3, type: 2}
+  equipmentType: 1
+  stats:
+    str:
+      baseValue: 5
+      modifiers: []
+    luk:
+      baseValue: 0
+      modifiers: []
+    dex:
+      baseValue: -2
+      modifiers: []
+    int:
+      baseValue: 0
+      modifiers: []
+    vit:
+      baseValue: 0
+      modifiers: []
+    maxHealth:
+      baseValue: 75
+      modifiers: []
+    evasion:
+      baseValue: -30
+      modifiers: []
+    defense:
+      baseValue: 50
+      modifiers: []
+    damage:
+      baseValue: 0
+      modifiers: []
+    critRate:
+      baseValue: 0
+      modifiers: []
+    critDamage:
+      baseValue: 0
+      modifiers: []
+    accuracy:
+      baseValue: 0
+      modifiers: []
+    ignoreDefense:
+      baseValue: 0
+      modifiers: []
+    fireDamage:
+      baseValue: 0
+      modifiers: []
+    iceDamage:
+      baseValue: 0
+      modifiers: []
+    lightningDamage:
+      baseValue: 0
+      modifiers: []
